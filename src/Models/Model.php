@@ -100,11 +100,6 @@ class Model
         return $this->columns[$name];
     }
 
-    public function setNamespace(string $namespace)
-    {
-        $this->namespace = $namespace;
-    }
-
     public function setPath(string $path)
     {
         $this->path = $path;
