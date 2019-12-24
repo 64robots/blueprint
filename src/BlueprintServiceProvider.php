@@ -40,7 +40,7 @@ class BlueprintServiceProvider extends ServiceProvider implements DeferrableProv
 
         $this->app->singleton(Blueprint::class, function ($app) {
             $blueprint = new Blueprint();
-            $blueprint->registerLexer(new \Blueprint\Lexers\ModelLexer());
+            $blueprint->registerLexer(new \Blueprint\Lexers\ModelLexer($app['files']));
             $blueprint->registerLexer(new \Blueprint\Lexers\ControllerLexer(new \Blueprint\Lexers\StatementLexer()));
 
             $blueprint->registerGenerator(new \Blueprint\Generators\MigrationGenerator($app['files']));

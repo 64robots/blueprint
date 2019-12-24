@@ -5,6 +5,7 @@ namespace Blueprint\Lexers;
 use Blueprint\Contracts\Lexer;
 use Blueprint\Models\Column;
 use Blueprint\Models\Model;
+use Illuminate\Filesystem\Filesystem;
 
 class ModelLexer implements Lexer
 {
@@ -82,6 +83,17 @@ class ModelLexer implements Lexer
         'unique' => 'unique',
     ];
 
+    private $modelPath = 'app';
+
+    /**
+     * @param Filesystem $files
+     * @param \Illuminate\Contracts\View\Factory $view
+     */
+    public function __construct(Filesystem $files)
+    {
+        $this->files = $files;
+    }
+
     public function analyze(array $tokens): array
     {
         $registry = [
@@ -90,6 +102,12 @@ class ModelLexer implements Lexer
 
         if (empty($tokens['models'])) {
             return $registry;
+        }
+
+        if (!empty($tokens['models']['config'])) {
+            $this->setConfig($tokens['models']['config']);
+            $this->createModelDirectory();
+            unset($tokens['models']['config']);
         }
 
         foreach ($tokens['models'] as $name => $definition) {
@@ -102,6 +120,8 @@ class ModelLexer implements Lexer
     private function buildModel(string $name, array $columns)
     {
         $model = new Model($name);
+
+        $model->setPath($this->modelPath);
 
         if (isset($columns['timestamps'])) {
             if ($columns['timestamps'] === false) {
@@ -169,5 +189,17 @@ class ModelLexer implements Lexer
         }
 
         return new Column($name, $data_type, $modifiers, $attributes ?? []);
+    }
+
+    private function createModelDirectory()
+    {
+        if (!$this->files->exists($this->modelPath)) {
+            $this->files->makeDirectory($this->modelPath);
+        }
+    }
+
+    private function setConfig(array $config)
+    {
+        $this->modelPath = $config['path'] ?? $this->modelPath;
     }
 }

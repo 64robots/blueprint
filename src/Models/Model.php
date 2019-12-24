@@ -10,6 +10,7 @@ class Model
     private $timestamps = 'timestamps';
     private $softDeletes = false;
     private $columns = [];
+    private $path = 'app';
 
     /**
      * @param $name
@@ -22,6 +23,16 @@ class Model
     public function name(): string
     {
         return Str::studly($this->name);
+    }
+
+    public function path(): string
+    {
+        return $this->path;
+    }
+
+    public function namespace(): string
+    {
+        return str_replace('/', '\\', ucwords($this->path, '/'));
     }
 
     public function addColumn(Column $column)
@@ -87,5 +98,15 @@ class Model
     public function column(string $name)
     {
         return $this->columns[$name];
+    }
+
+    public function setNamespace(string $namespace)
+    {
+        $this->namespace = $namespace;
+    }
+
+    public function setPath(string $path)
+    {
+        $this->path = $path;
     }
 }

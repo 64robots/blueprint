@@ -39,7 +39,7 @@ class ModelGenerator implements Generator
 
     protected function populateStub(string $stub, Model $model)
     {
-        $stub = str_replace('DummyNamespace', 'App', $stub);
+        $stub = str_replace('DummyNamespace', $model->namespace(), $stub);
         $stub = str_replace('DummyClass', $model->name(), $stub);
 
         $body = $this->buildProperties($model);
@@ -106,7 +106,7 @@ class ModelGenerator implements Generator
 
     protected function getPath(Model $model)
     {
-        return 'app/' . $model->name() . '.php';
+        return $model->path() . '/' . $model->name() . '.php';
     }
 
     private function fillableColumns(array $columns)
