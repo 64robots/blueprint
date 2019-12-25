@@ -12,11 +12,14 @@ class ModelLexerTest extends TestCase
      */
     private $subject;
 
+    private $files;
+
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->subject = new ModelLexer();
+        $this->files = \Mockery::mock();
+        $this->subject = new ModelLexer($this->files);
     }
 
     /**

@@ -23,7 +23,7 @@ class ModelGeneratorTest extends TestCase
         $this->subject = new ModelGenerator($this->files);
 
         $this->blueprint = new Blueprint();
-        $this->blueprint->registerLexer(new \Blueprint\Lexers\ModelLexer());
+        $this->blueprint->registerLexer(new \Blueprint\Lexers\ModelLexer($this->files));
         $this->blueprint->registerGenerator($this->subject);
     }
 

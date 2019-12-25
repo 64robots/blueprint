@@ -5,7 +5,6 @@ namespace Blueprint\Lexers;
 use Blueprint\Contracts\Lexer;
 use Blueprint\Models\Column;
 use Blueprint\Models\Model;
-use Illuminate\Filesystem\Filesystem;
 
 class ModelLexer implements Lexer
 {
@@ -83,13 +82,14 @@ class ModelLexer implements Lexer
         'unique' => 'unique',
     ];
 
+    /**
+     * @var \Illuminate\Contracts\Filesystem\Filesystem
+     */
+    private $files;
+    
     private $modelPath = 'app';
 
-    /**
-     * @param Filesystem $files
-     * @param \Illuminate\Contracts\View\Factory $view
-     */
-    public function __construct(Filesystem $files)
+    public function __construct($files)
     {
         $this->files = $files;
     }
